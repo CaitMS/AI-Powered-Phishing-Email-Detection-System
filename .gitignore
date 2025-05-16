@@ -1,2 +1,3 @@
 venv
+appvenv
 dataset/phishing_email.csv
