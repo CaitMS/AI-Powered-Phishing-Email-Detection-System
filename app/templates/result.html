@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phishing Analysis Results</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        .container {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .result-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .result-badge {
+            padding: 8px 16px;
+            border-radius: 4px;
+            color: white;
+            font-weight: bold;
+            margin-left: 15px;
+        }
+        .phishing {
+            background-color: #e74c3c;
+        }
+        .legitimate {
+            background-color: #2ecc71;
+        }
+        .confidence {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-left: 10px;
+        }
+        .shap-plot {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .email-content {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            white-space: pre-wrap;
+        }
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px;
+            border-radius: 2px;
+        }
+        .back-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .back-button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Email Analysis Results</h1>
+    <div class="container">
+        <div class="result-header">
+            <h2>Classification:</h2>
+            {% if result.is_phishing %}
+                <div class="result-badge phishing">PHISHING</div>
+            {% else %}
+                <div class="result-badge legitimate">LEGITIMATE</div>
+            {% endif %}
+            <span class="confidence">({{ (result.confidence * 100)|round(2) }}% confidence)</span>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h2>Email Content with Highlighted Indicators:</h2>
+        <div class="email-content">
+            {{ result.highlighted_text | safe }}
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="shap-plot">
+            <h3>Feature Importance:</h3>
+            <img src="data:image/png;base64,{{ result.shap_plot }}" alt="SHAP Explanation" style="max-width: 100%; height: auto;">
+        </div>
+    </div>
+    
+    <a href="/" class="back-button">Analyse Another Email</a>
+</body>
+</html>
