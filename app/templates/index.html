@@ -105,7 +105,7 @@
         <h1>Phishing Email Detection</h1>
         
         <div class="info-box">
-            <p>Upload an email file (.eml) or paste email content to analyze it for potential phishing indicators.</p>
+            <p>Upload an email file (.eml) or paste email content to analyse it for potential phishing indicators.</p>
         </div>
         
         <div class="tab-group">
@@ -124,7 +124,7 @@
                 <div class="security-note">
                     <strong>Security Note:</strong> Files are processed securely and not stored permanently. Maximum file size: 10MB.
                 </div>
-                <button type="submit">Analyze Email</button>
+                <button type="submit">Analyse Email</button>
             </form>
         </div>
         
@@ -148,7 +148,7 @@
                     <textarea id="body" name="body" placeholder="Paste email content here" maxlength="50000"></textarea>
                     <div id="content-error" class="error-message" style="color: red; display: none;">Please enter some email content</div>
                 </div>
-                <button type="submit">Analyze Email</button>
+                <button type="submit">Analyse Email</button>
             </form>
         </div>
     </div>
@@ -217,180 +217,3 @@
 </body>
 </html>
 
-<!-- result.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phishing Detection Results</title>
-    <link rel="stylesheet" href="/styles.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            color: #333;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        h1, h2 {
-            color: #2c3e50;
-        }
-        h1 {
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
-        }
-        .container {
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .result-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .result-badge {
-            padding: 10px 15px;
-            border-radius: 20px;
-            color: white;
-            font-weight: bold;
-            margin-left: 15px;
-        }
-        .phishing {
-            background-color: #e74c3c;
-        }
-        .legitimate {
-            background-color: #2ecc71;
-        }
-        .result-section {
-            margin-bottom: 30px;
-        }
-        .email-content {
-            background-color: white;
-            border: 1px solid #ddd;
-            padding: 15px;
-            border-radius: 5px;
-            white-space: pre-wrap;
-            overflow-x: auto;
-        }
-        .word-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        .word-chip {
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 14px;
-        }
-        .phishing-word {
-            background-color: rgba(255, 99, 71, 0.2);
-            border: 1px solid #FF6347;
-        }
-        .legitimate-word {
-            background-color: rgba(50, 205, 50, 0.2);
-            border: 1px solid #32CD32;
-        }
-        .button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            text-decoration: none;
-            display: inline-block;
-            cursor: pointer;
-        }
-        .button:hover {
-            background-color: #2980b9;
-        }
-        .explanation {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 20px 0;
-            border-left: 4px solid #3498db;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="result-header">
-            <h1>Analysis Results</h1>
-            {% if result.is_phishing %}
-                <div class="result-badge phishing">Likely Phishing ({{ "%.1f"|format(result.confidence * 100) }}%)</div>
-            {% else %}
-                <div class="result-badge legitimate">Likely Legitimate ({{ "%.1f"|format(result.confidence * 100) }}%)</div>
-            {% endif %}
-        </div>
-        
-        <div class="explanation">
-            <p>This analysis is based on machine learning predictions and should be used as a guidance tool, not as definitive proof. Always exercise caution with suspicious emails.</p>
-        </div>
-        
-        <div class="result-section">
-            <h2>Key Indicators</h2>
-            
-            <h3>Phishing Indicators</h3>
-            <div class="word-list">
-                {% if result.phishing_words %}
-                    {% for word in result.phishing_words %}
-                        <div class="word-chip phishing-word">{{ word }}</div>
-                    {% endfor %}
-                {% else %}
-                    <p>No strong phishing indicators found.</p>
-                {% endif %}
-            </div>
-            
-            <h3>Legitimate Indicators</h3>
-            <div class="word-list">
-                {% if result.legitimate_words %}
-                    {% for word in result.legitimate_words %}
-                        <div class="word-chip legitimate-word">{{ word }}</div>
-                    {% endfor %}
-                {% else %}
-                    <p>No strong legitimate indicators found.</p>
-                {% endif %}
-            </div>
-        </div>
-        
-        <div class="result-section">
-            <h2>SHAP Explanation</h2>
-            {% if result.shap_plot %}
-                <img src="data:image/png;base64,{{ result.shap_plot }}" alt="SHAP Value Plot" style="max-width: 100%; height: auto;">
-            {% else %}
-                <p>SHAP explanation not available for this analysis.</p>
-            {% endif %}
-        </div>
-        
-        <div class="result-section">
-            <h2>Email Content</h2>
-            <p>Words highlighted in <span class="highlight-phishing">red</span> indicate potential phishing indicators, while words in <span class="highlight-legitimate">green</span> suggest legitimacy.</p>
-            <div class="email-content">
-                {{ result.highlighted_text|safe }}
-            </div>
-        </div>
-        
-        <a href="/" class="button">Analyze Another Email</a>
-    </div>
-    
-    <script>
-        // Immediately execute when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add noopener and noreferrer to all external links in the content
-            document.querySelectorAll('.email-content a[href^="http"]').forEach(function(link) {
-                link.setAttribute('rel', 'noopener noreferrer');
-                link.setAttribute('target', '_blank');
-                
-                // Add warning that this might be a suspicious link
-                link.title = "Warning: This might be a suspicious link. Click with caution.";
-            });
-        });
-    </script>
-</body>
-</html>
