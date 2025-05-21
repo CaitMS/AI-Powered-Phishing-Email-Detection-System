@@ -18,13 +18,14 @@ import os
 
 app = Flask(__name__)
 
-# Download NLTK resources
+nltk.data.path.append('./nltk_data')
+
 try:
     nltk.data.find('tokenizers/punkt')
     nltk.data.find('corpora/stopwords')
 except LookupError:
-    nltk.download('punkt')
-    nltk.download('stopwords')
+    nltk.download('punkt', download_dir='./nltk_data')
+    nltk.download('stopwords', download_dir='./nltk_data')
 
 # Load the model pipeline
 try:
